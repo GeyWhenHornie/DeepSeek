@@ -18,7 +18,29 @@ export default function ChatBot() {
     try {
       setIsLoading(true);
 
-      // Send the message to the API
+      // Set up headers
+      const headers = {
+        'accept': '*/*',
+        'accept-encoding': 'gzip, deflate, br, zstd',
+        'accept-language': 'en-US,en;q=0.9',
+        'authorization': 'Bearer gva4FuRUQswvHB7iUl6cjzURelDX1SGbrkYd6xLU4215MAdYlawVtpm9XXFOQ1nJ', // Your Bearer token here
+        'origin': 'https://chat.deepseek.com',
+        'referer': 'https://chat.deepseek.com/a/chat/s/fbe42849-9a6e-4636-a06c-c949ba712936',
+        'sec-ch-ua': '"Chromium";v="130", "Opera GX";v="115", "Not?A_Brand";v="99"',
+        'sec-ch-ua-mobile': '?0',
+        'sec-ch-ua-platform': '"Windows"',
+        'sec-fetch-dest': 'empty',
+        'sec-fetch-mode': 'cors',
+        'sec-fetch-site': 'same-origin',
+        'user-agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/130.0.0.0 Safari/537.36 OPR/115.0.0.0',
+        'x-app-version': '20241129.1',
+        'x-client-locale': 'en_US',
+        'x-client-platform': 'web',
+        'x-client-version': '1.0.0-always',
+        'x-ds-pow-response': 'eyJhbGdvcml0aG0iOiJEZWVwU2Vla0hhc2hWMSIsImNoYWxsZW5nZSI6IjU1MWNlNzFkMzVjNDUxZmYxZThhNWM3ZWE5NjFiNzY2MjRlYzI0YzAyMzA1MjRhM2Y0MDE1NTM5MjUwNGRmZTQiLCJzYWx0IjoiZmE4ZmYxNWM1NTZlY2VhNjdlZjIiLCJhbnN3ZXIiOjY4NTI4LCJzaWduYXR1cmUiOiI3ZDAzOGFlNzBiMGFhYTM2ZmJkZmViNmM5YzIzZTQ3MzllNmJiYWRkZWIzNTAyMjgzOGJjYzkxNGIzZTEyNTI1IiwidGFyZ2V0X3BhdGgiOiIvYXBpL3YwL2NoYXQvY29tcGxldGlvbiJ9'
+      };
+
+      // Send the message to the API with headers
       const response = await axios.post('https://chat.deepseek.com/api/v0/chat/completion', {
         chat_session_id: 'fbe42849-9a6e-4636-a06c-c949ba712936',
         parent_message_id: 8,
@@ -26,7 +48,10 @@ export default function ChatBot() {
         ref_file_ids: [],
         thinking_enabled: false,
         search_enabled: false,
-      }, { responseType: 'stream' });
+      }, { 
+        headers: headers, // Add the headers here
+        responseType: 'stream' 
+      });
 
       // Process the streaming response
       const reader = response.data.getReader();
@@ -73,9 +98,7 @@ export default function ChatBot() {
               className={`mb-2 flex ${msg.sender === 'user' ? 'justify-end' : 'justify-start'}`}
             >
               <div
-                className={`px-4 py-2 rounded-lg text-white ${
-                  msg.sender === 'user' ? 'bg-blue-500' : 'bg-gray-500'
-                }`}
+                className={`px-4 py-2 rounded-lg text-white ${msg.sender === 'user' ? 'bg-blue-500' : 'bg-gray-500'}`}
               >
                 {msg.text}
               </div>
